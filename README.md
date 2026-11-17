@@ -114,3 +114,9 @@ src/
 public/                 ← копируется в dist как есть (robots.txt, .htaccess, api/lead.php)
 scripts/                ← типограф и проверки сборки
 ```
+
+## Превью на GitHub Pages
+
+Чтобы показать сайт до выкладки на root-lab.ru, при каждом пуше в `main` workflow `.github/workflows/pages-preview.yml` собирает копию сайта по адресу https://rdn513.github.io/rootlab-site/. Копия закрыта от индексации (`noindex`, `robots.txt` с `Disallow: /`), поэтому поисковики не примут её за дубль основного сайта.
+
+Один раз нужно включить Pages: **Settings → Pages → Source: GitHub Actions**.
