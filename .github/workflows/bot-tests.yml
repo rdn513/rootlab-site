@@ -1,0 +1,28 @@
+name: Тесты бота
+
+on:
+  push:
+    paths: ['bot/**', 'src/data/site.ts', '.github/workflows/bot-tests.yml']
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Данные сайта для бота совпадают с site.ts
+        working-directory: .
+        run: |
+          node --experimental-strip-types --no-warnings scripts/export-bot-data.mjs
+          git diff --exit-code bot/app/site_data.json || (echo "Запустите npm run build и закоммитьте bot/app/site_data.json" && exit 1)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q

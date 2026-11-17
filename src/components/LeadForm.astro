@@ -1,10 +1,10 @@
 ---
-import { leadForm } from '../data/site';
+import { leadForm, botLink } from '../data/site';
 interface Props { source?: string; }
 const { source = 'home' } = Astro.props;
 const uid = `lf-${source}`;
 ---
-<form class="lead" novalidate data-endpoint={leadForm.endpoint} data-source={source} aria-describedby={`${uid}-note`}>
+<form class="lead" novalidate data-endpoint={leadForm.endpoint} data-bot={botLink('formError')} data-source={source} aria-describedby={`${uid}-note`}>
   <div class="lead__grid">
     <div class="field">
       <label for={`${uid}-name`}>Как к вам обращаться</label>
@@ -72,7 +72,7 @@ const uid = `lf-${source}`;
         ok.hidden = false;
         ok.focus?.();
       } else {
-        err.textContent = 'Не получилось отправить. Напишите нам в Telegram или на почту.';
+        err.innerHTML = `Не получилось отправить. Напишите нам в <a href="${form.dataset.bot}" target="_blank" rel="noopener">Telegram</a> или на почту.`;
         err.hidden = false;
       }
     });

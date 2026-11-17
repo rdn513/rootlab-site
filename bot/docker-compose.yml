@@ -1,0 +1,29 @@
+# Бот @rootlab_help_bot + приём заявок с формы сайта.
+# Caddy сам получает HTTPS-сертификат для API_DOMAIN.
+services:
+  bot:
+    build: .
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - bot-data:/data
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      API_DOMAIN: ${API_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - bot
+
+volumes:
+  bot-data:
+  caddy-data:

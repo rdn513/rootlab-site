@@ -1,6 +1,5 @@
 // Отправка заявки с формы.
 // Адрес обработчика задаётся в src/data/site.ts → leadForm.endpoint.
-// [куда отправлять заявки — уточнить]
 import { goal } from './analytics';
 
 export type Lead = {

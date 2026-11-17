@@ -1,0 +1,12 @@
+{$API_DOMAIN} {
+	encode gzip
+	handle /lead {
+		reverse_proxy bot:8080
+	}
+	handle /health {
+		reverse_proxy bot:8080
+	}
+	handle {
+		respond "RootLab API" 404
+	}
+}

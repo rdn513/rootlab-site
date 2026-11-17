@@ -88,6 +88,7 @@ export const botTags = {
   migrationBottom: 'site_migration_bottom',
   blog: 'site_blog',
   notFound: 'site_404',
+  formError: 'site_form_error', // ссылка в сообщении об ошибке формы
 } as const;
 
 export type BotTag = keyof typeof botTags;
@@ -110,12 +111,11 @@ export const analytics = {
 
 export const leadForm = {
   /**
-   * Куда отправлять заявки с формы. Пусто — форма работает в демо-режиме:
-   * показывает «Заявка принята» и пишет данные в консоль браузера.
-   * Вариант: '/api/lead.php' — заготовка лежит в public/api/lead.php
-   * (отправляет заявку в Telegram, нужен хостинг с PHP).
+   * Куда отправлять заявки с формы. Принимает бот на VPS (папка bot/),
+   * карточка заявки приходит в Telegram-чат команды.
+   * Пусто — демо-режим: форма показывает «Заявка принята» и пишет в консоль.
    */
-  endpoint: '', // [куда отправлять заявки — уточнить]
+  endpoint: 'https://api.root-lab.ru/lead',
 };
 
 /* ---------- Разовые продукты ---------- */

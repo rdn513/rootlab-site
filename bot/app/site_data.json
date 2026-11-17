@@ -1,0 +1,232 @@
+{
+  "_comment": "Файл генерируется из src/data/site.ts (npm run build). Не правьте вручную.",
+  "company": {
+    "name": "RootLab",
+    "url": "https://root-lab.ru",
+    "city": "Екатеринбург",
+    "region": "Свердловская область",
+    "phone": "[телефон — уточнить]",
+    "email": "hello@root-lab.ru",
+    "copyright": "© 2026 RootLab",
+    "legal": {
+      "name": "[ООО «…» — уточнить]",
+      "inn": "[ИНН — уточнить]",
+      "ogrn": "[ОГРН — уточнить]"
+    }
+  },
+  "social": [
+    {
+      "name": "Telegram-канал",
+      "url": "https://t.me/journal_RL"
+    },
+    {
+      "name": "Дзен",
+      "url": "https://dzen.ru/rootlab"
+    },
+    {
+      "name": "ВКонтакте",
+      "url": "https://vk.com/journal_rl"
+    }
+  ],
+  "products": [
+    {
+      "id": "checkup",
+      "name": "Техосмотр сайта",
+      "audience": "Для владельцев интернет-магазинов, онлайн-школ, сервисов записи",
+      "summary": "Проверим, что ваш сайт переживёт сбой, распродажу и уход подрядчика.",
+      "includes": [
+        "Есть ли рабочие запасные копии сайта и базы заказов",
+        "У кого есть доступы и где лежат пароли",
+        "Выдержит ли сайт наплыв покупателей",
+        "Незапертые двери, через которые можно унести базу клиентов",
+        "Две страницы простым языком: что в порядке, что опасно, что сделать первым"
+      ],
+      "term": "5 рабочих дней",
+      "price": 12000,
+      "cta": "Заказать техосмотр",
+      "tag": "pricingCheckup",
+      "page": "/audit/#checkup"
+    },
+    {
+      "id": "audit",
+      "name": "Экспресс-аудит инфраструктуры",
+      "audience": "Для веб-студий и продуктовых команд",
+      "summary": "Полная картина рисков и план работ, который можно отдать любому подрядчику.",
+      "includes": [
+        "Отчёт с рисками по приоритетам",
+        "План работ с оценкой в часах",
+        "Часовой созвон с техническим директором"
+      ],
+      "term": "5 рабочих дней",
+      "price": 30000,
+      "priceNote": "засчитывается в стоимость работ",
+      "cta": "Заказать аудит",
+      "tag": "pricingAudit",
+      "page": "/audit/"
+    },
+    {
+      "id": "emergency",
+      "name": "Аварийная помощь",
+      "audience": "Для всех, у кого прямо сейчас что-то упало",
+      "summary": "Подключаемся, поднимаем сайт или сервер, коротко разбираем причину.",
+      "includes": [
+        "Подключение к серверу и поиск причины",
+        "Восстановление работы сайта",
+        "Короткий разбор: что случилось и как не допустить снова"
+      ],
+      "term": "По факту",
+      "price": 5000,
+      "unit": "₽/час",
+      "priceNote": "минимум 2 часа",
+      "cta": "Нужна помощь сейчас",
+      "tag": "pricingEmergency",
+      "page": "/emergency/"
+    },
+    {
+      "id": "order",
+      "name": "Проект «Порядок»",
+      "audience": "Для клиентов после аудита",
+      "summary": "Делаем то, что нашли на аудите, и оставляем систему, за которой легко следить.",
+      "includes": [
+        "Запасные копии с проверкой восстановления",
+        "Сигнализация: узнаём о сбое раньше покупателей",
+        "Обновления сайта выходят без поломок и ночных работ",
+        "Документация: схема, доступы, инструкции"
+      ],
+      "term": "2–6 недель",
+      "price": 90000,
+      "priceFrom": true,
+      "cta": "Обсудить проект",
+      "tag": "pricingOrder",
+      "page": "/devops/"
+    }
+  ],
+  "plans": [
+    {
+      "id": "basic",
+      "name": "Базовый",
+      "price": 35000,
+      "scope": "До 3 серверов, один проект",
+      "tag": "pricingBasic"
+    },
+    {
+      "id": "business",
+      "name": "Бизнес",
+      "price": 80000,
+      "scope": "До 8 серверов",
+      "tag": "pricingBusiness",
+      "featured": true
+    }
+  ],
+  "planRows": [
+    {
+      "plain": "Объём",
+      "tech": "Объём",
+      "basic": "До 3 серверов, один проект",
+      "business": "До 8 серверов"
+    },
+    {
+      "plain": "Сигнализация о сбоях круглосуточно",
+      "tech": "Автоматический мониторинг 24 часа в сутки",
+      "basic": true,
+      "business": true
+    },
+    {
+      "plain": "Запасные копии с проверкой восстановления",
+      "tech": "Бэкапы с тестовым восстановлением",
+      "basic": "Раз в месяц",
+      "business": "Раз в месяц"
+    },
+    {
+      "plain": "Часы инженера на ваши задачи",
+      "tech": "Часы инженера на задачи",
+      "basic": "4 часа",
+      "business": "12 часов"
+    },
+    {
+      "plain": "Помощь с выпуском обновлений",
+      "tech": "Поддержка релизов и CI/CD",
+      "basic": false,
+      "business": true
+    },
+    {
+      "plain": "Начинаем чинить, если сайт не открывается",
+      "tech": "Реакция на недоступность",
+      "basic": "До 2 часов, с 9 до 21 по будням",
+      "business": "До 1 часа, с 9 до 22 ежедневно"
+    },
+    {
+      "plain": "Обычные заявки",
+      "tech": "Плановые заявки",
+      "basic": "Следующий рабочий день",
+      "business": "В тот же день"
+    },
+    {
+      "plain": "Компенсация, если мы опоздали",
+      "tech": "Компенсация за нарушение срока реакции",
+      "basic": false,
+      "business": "5% месячной платы за случай, до 30%"
+    },
+    {
+      "plain": "Отчёт",
+      "tech": "Отчётность",
+      "basic": "Раз в месяц",
+      "business": "Раз в месяц + разбор раз в квартал"
+    }
+  ],
+  "planNotes": {
+    "timezone": "Время реакции указано по Екатеринбургу (UTC+5).",
+    "nightShift": "Нужна круглосуточная дежурная смена? Напишите — обсудим отдельно."
+  },
+  "firstClients": {
+    "discount": 40,
+    "months": 3,
+    "slots": 3
+  },
+  "partners": {
+    "revenueShare": 15,
+    "revenueShareMonths": 6,
+    "whiteLabelDiscount": "20–30"
+  },
+  "botTags": {
+    "header": "site_header",
+    "mobileMenu": "site_menu",
+    "hero": "site_hero",
+    "heroQuestion": "site_hero_question",
+    "heroCheckup": "site_hero_checkup",
+    "pricingCheckup": "site_pricing_checkup",
+    "pricingAudit": "site_pricing_audit",
+    "pricingEmergency": "site_pricing_emergency",
+    "pricingOrder": "site_pricing_order",
+    "pricingBasic": "site_pricing_basic",
+    "pricingBusiness": "site_pricing_business",
+    "pricingNightShift": "site_pricing_night",
+    "firstClients": "site_first_clients",
+    "team": "site_team_question",
+    "final": "site_final",
+    "finalCheckup": "site_final_checkup",
+    "auditPage": "site_audit",
+    "auditPageCheckup": "site_audit_checkup",
+    "auditPageBottom": "site_audit_bottom",
+    "auditCardCheckup": "site_audit_card_checkup",
+    "auditCardAudit": "site_audit_card_audit",
+    "supportTop": "site_support",
+    "supportBasic": "site_support_basic",
+    "supportBusiness": "site_support_business",
+    "supportBottom": "site_support_bottom",
+    "supportNight": "site_support_night",
+    "emergencyTop": "site_emergency",
+    "emergencyAside": "site_emergency_card",
+    "emergencyBottom": "site_emergency_bottom",
+    "partners": "site_partners",
+    "partnersBottom": "site_partners_bottom",
+    "devops": "site_devops",
+    "devopsBottom": "site_devops_bottom",
+    "migration": "site_migration",
+    "migrationBottom": "site_migration_bottom",
+    "blog": "site_blog",
+    "notFound": "site_404",
+    "formError": "site_form_error"
+  },
+  "privacyUrl": "https://root-lab.ru/privacy/"
+}
