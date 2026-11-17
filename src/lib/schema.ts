@@ -1,5 +1,5 @@
 // Разметка schema.org (JSON-LD). Все цены и контакты — из src/data/site.ts
-import { company, social, products, plans, isPlaceholder, type Product } from '../data/site';
+import { company, social, products, plans, team, isPlaceholder, type Product } from '../data/site';
 
 export function organization() {
   const org: Record<string, unknown> = {
@@ -20,6 +20,9 @@ export function organization() {
     },
     areaServed: { '@type': 'Country', name: 'Россия' },
     sameAs: social.map((s) => s.url),
+    employee: team
+      .filter((m) => m.surname && !isPlaceholder(m.surname))
+      .map((m) => ({ '@type': 'Person', name: `${m.name} ${m.surname}`, jobTitle: m.role })),
   };
   if (!isPlaceholder(company.phone)) org.telephone = company.phone;
   return org;
