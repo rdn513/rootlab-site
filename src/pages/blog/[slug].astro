@@ -1,0 +1,36 @@
+---
+// Шаблон статьи блога
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { company } from '../../data/site';
+import { breadcrumbs } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const url = `${company.url}/blog/${post.id}/`;
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  mainEntityOfPage: url,
+  author: { '@id': `${company.url}/#org` },
+  publisher: { '@id': `${company.url}/#org` },
+};
+---
+<Base title={`${post.data.title} | Блог RootLab`} description={post.data.description} schema={[article, breadcrumbs([{ name: 'Блог', path: '/blog/' }, { name: post.data.title, path: `/blog/${post.id}/` }])]}>
+  <PageHead crumb="Блог" title={post.data.title}>
+    <p class="mono small"><time datetime={post.data.date.toISOString()}>{post.data.date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</time></p>
+  </PageHead>
+  <article class="section"><div class="container prose"><Content /></div></article>
+  <CtaBand title="Хотите, чтобы мы посмотрели ваш сервер?" tag="blog" label="Задать вопрос инженеру" source="blog" form={false}>
+    <p>Начните с техосмотра или аудита — 5 рабочих дней, фиксированная цена.</p>
+  </CtaBand>
+</Base>

@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/page.css';
+import PageHead from '../../components/PageHead.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BotButton from '../../components/BotButton.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Txt from '../../components/Txt.astro';
+import { getProduct, rub } from '../../data/site';
+import { breadcrumbs } from '../../lib/schema';
+
+const audit = getProduct('audit');
+const plan = [
+  ['Инвентаризация', 'Что и где работает у зарубежного провайдера: серверы, базы, объектные хранилища, DNS, почта, CDN, сторонние API. Что от чего зависит.'],
+  ['Выбор площадки', 'Подбираем российское облако или хостинг под нагрузку и бюджет: Yandex Cloud, VK Cloud, Selectel, Timeweb Cloud и другие. Сравниваем стоимость до и после.'],
+  ['Целевая архитектура', 'Описываем инфраструктуру кодом (Terraform, Ansible), чтобы её можно было воспроизвести, а не переносить руками.'],
+  ['Репетиция', 'Поднимаем копию на новой площадке, переносим данные, прогоняем проверки. Замеряем, сколько займёт финальное переключение.'],
+  ['Переключение', 'В согласованное окно: финальная синхронизация данных, смена DNS с заранее уменьшенным TTL, проверка. План отката готов заранее.'],
+  ['Сопровождение после', 'Наблюдаем за новой площадкой [срок — уточнить], потом передаём документацию или переходим на сопровождение.'],
+];
+---
+<Base
+  title="Переезд в российское облако с зарубежного хостинга | RootLab"
+  description="Переносим сайты и сервисы с зарубежного хостинга и облаков в российское облако: инвентаризация, репетиция переезда, переключение с минимальным простоем и планом отката."
+  schema={[breadcrumbs([{ name: 'Переезд в российское облако', path: '/migration/' }])]}
+>
+  <PageHead crumb="Переезд в российское облако" eyebrow="Миграция" title="Переезд с зарубежного хостинга в российское облако">
+    <p>Переносим сайты и сервисы с AWS, DigitalOcean, Hetzner и других зарубежных площадок. С репетицией, планом отката и переключением в согласованное окно.</p>
+    <Fragment slot="cta"><BotButton tag="migration">Обсудить переезд</BotButton></Fragment>
+  </PageHead>
+
+  <section class="section" aria-labelledby="mplan-title">
+    <div class="container">
+      <SectionHead eyebrow="План" title="Как проходит переезд" id="mplan-title" />
+      <ol class="numlist" style="max-width:860px">{plan.map(([t, d]) => <li><h3>{t}</h3><p><Txt text={d} /></p></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="mprice-title">
+    <div class="container two">
+      <div>
+        <SectionHead eyebrow="Стоимость" title="Сколько стоит" id="mprice-title">
+          Зависит от числа сервисов и объёма данных. Начинаем с аудита за {rub(audit.price)}: по его итогам — план переезда с оценкой в часах и стоимость новой площадки. Сумма аудита засчитывается в работы.
+        </SectionHead>
+        <p class="small"><mark class="ph">[типовая вилка цен на переезд — уточнить]</mark></p>
+      </div>
+      <div class="note">
+        <p><b>Простой при переезде.</b> Для большинства сайтов переключение занимает минуты, но точную цифру назовём только после репетиции. Заранее обещать «без простоя» не будем.</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Расскажите, где сейчас работает проект" tag="migrationBottom" label="Обсудить переезд" source="migration">
+    <p>Провайдер, число серверов, объём данных — этого достаточно, чтобы начать разговор.</p>
+  </CtaBand>
+</Base>

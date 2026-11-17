@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { company, analytics } from '../data/site';
+import { organization } from '../lib/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: object[];
+  ogImage?: string;
+  noindex?: boolean;
+}
+const { title, description, schema = [], ogImage = '/og.png', noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, company.url).href;
+const ld = [organization(), ...schema];
+const metrika = { id: analytics.metrikaId, requireConsent: analytics.requireConsent };
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta name="theme-color" content="#f7f7f4" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icon-512.png" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:site_name" content="RootLab" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(ogImage, company.url).href} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  {ld.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+  <Header />
+  <main id="main"><slot /></main>
+  <Footer />
+
+  <div class="cookie" id="cookie" hidden role="region" aria-label="Уведомление о cookie">
+    <p>Сайт использует cookie для статистики посещений (Яндекс Метрика). Подробнее — в <a href="/privacy/">политике</a>.</p>
+    <div class="cookie__btns">
+      <button class="btn btn--primary btn--sm" type="button" data-consent="yes">Согласен</button>
+      <button class="btn btn--ghost btn--sm" type="button" data-consent="no">Только необходимые</button>
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ metrika }}>
+    window.__rl = { metrika };
+  </script>
+  <script>
+    import { initAnalytics } from '../scripts/analytics';
+    initAnalytics();
+  </script>
+  <style>
+    .cookie {
+      position: fixed; z-index: 60; left: 12px; right: 12px; bottom: 12px;
+      max-width: 460px; padding: 16px; display: grid; gap: 12px;
+      background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg);
+      box-shadow: 0 8px 30px rgba(29, 32, 36, .12); font-size: .875rem;
+    }
+    .cookie[hidden] { display: none; }
+    .cookie__btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (min-width: 640px) { .cookie { left: 24px; right: auto; bottom: 24px; } }
+  </style>
+</body>
+</html>

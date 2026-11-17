@@ -1,0 +1,24 @@
+---
+interface Props { crumb: string; title: string; eyebrow?: string; }
+const { crumb, title, eyebrow } = Astro.props;
+---
+<section class="phead">
+  <div class="container">
+    <nav aria-label="Хлебные крошки" class="crumbs mono"><a href="/">Главная</a> <span aria-hidden="true">/</span> <span aria-current="page">{crumb}</span></nav>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    <div class="phead__lead"><slot /></div>
+    {Astro.slots.has('cta') && <div class="phead__cta"><slot name="cta" /></div>}
+  </div>
+</section>
+<style>
+  .phead { padding: 28px 0 56px; border-bottom: 1px solid var(--line); }
+  .phead .container { display: grid; gap: 18px; }
+  .phead h1 { max-width: 900px; }
+  .crumbs { font-size: .8125rem; color: var(--ink-3); }
+  .crumbs a { color: var(--ink-3); }
+  .phead__lead { font-size: 1.125rem; color: var(--ink-2); max-width: 680px; display: grid; gap: 10px; }
+  .phead__cta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  @media (max-width: 420px) { .phead__cta :global(.btn) { width: 100%; } }
+  @media (min-width: 1024px) { .phead { padding: 56px 0 88px; } }
+</style>

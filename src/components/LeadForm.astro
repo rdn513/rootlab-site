@@ -1,0 +1,91 @@
+---
+import { leadForm } from '../data/site';
+interface Props { source?: string; }
+const { source = 'home' } = Astro.props;
+const uid = `lf-${source}`;
+---
+<form class="lead" novalidate data-endpoint={leadForm.endpoint} data-source={source} aria-describedby={`${uid}-note`}>
+  <div class="lead__grid">
+    <div class="field">
+      <label for={`${uid}-name`}>Как к вам обращаться</label>
+      <input class="input" id={`${uid}-name`} name="name" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for={`${uid}-contact`}>Telegram или телефон</label>
+      <input class="input" id={`${uid}-contact`} name="contact" autocomplete="tel" required placeholder="@username или +7…" />
+    </div>
+    <div class="field lead__wide">
+      <label for={`${uid}-site`}>Адрес сайта</label>
+      <input class="input" id={`${uid}-site`} name="site" inputmode="url" autocomplete="url" placeholder="example.ru" />
+    </div>
+    <div class="field lead__wide">
+      <label for={`${uid}-msg`}>Что беспокоит</label>
+      <textarea class="input" id={`${uid}-msg`} name="message" rows="3" placeholder="Например: сайт падает по вечерам, копий нет, пароли у бывшего подрядчика"></textarea>
+    </div>
+    <div class="lead__hp" aria-hidden="true">
+      <label>Не заполняйте это поле <input name="company_website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+    <label class="check lead__wide">
+      <input type="checkbox" name="consent" required />
+      <span>Согласен на обработку персональных данных в соответствии с <a href="/privacy/" target="_blank">политикой</a></span>
+    </label>
+  </div>
+  <p class="lead__error small" role="alert" hidden></p>
+  <button class="btn btn--primary" type="submit">Отправить заявку</button>
+  <p class="small muted" id={`${uid}-note`}>Ответим в рабочее время в течение дня. Без рассылок.</p>
+  <div class="lead__ok" role="status" tabindex="-1" hidden>
+    <p class="mono">Заявка принята.</p>
+    <p>Свяжемся с вами в рабочее время. Если срочно — напишите в Telegram.</p>
+  </div>
+</form>
+
+<script>
+  import { sendLead } from '../scripts/lead';
+  document.querySelectorAll<HTMLFormElement>('form.lead').forEach((form) => {
+    const err = form.querySelector<HTMLElement>('.lead__error')!;
+    const ok = form.querySelector<HTMLElement>('.lead__ok')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.hidden = true;
+      const invalid: string[] = [];
+      form.querySelectorAll<HTMLInputElement>('[required]').forEach((el) => {
+        const bad = el.type === 'checkbox' ? !el.checked : !el.value.trim();
+        el.setAttribute('aria-invalid', String(bad));
+        if (bad) invalid.push(el.name);
+      });
+      if (invalid.length) {
+        err.textContent = invalid.includes('consent') && invalid.length === 1
+          ? 'Отметьте согласие на обработку персональных данных.'
+          : 'Заполните имя, контакт и отметьте согласие на обработку персональных данных.';
+        err.hidden = false;
+        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        return;
+      }
+      const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      btn.disabled = true;
+      const fd = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      const res = await sendLead(form.dataset.endpoint || '', { ...fd, source: form.dataset.source || '' });
+      btn.disabled = false;
+      if (res.ok) {
+        form.querySelector('.lead__grid')!.setAttribute('hidden', '');
+        btn.hidden = true;
+        ok.hidden = false;
+        ok.focus?.();
+      } else {
+        err.textContent = 'Не получилось отправить. Напишите нам в Telegram или на почту.';
+        err.hidden = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  .lead { display: grid; gap: 20px; }
+  .lead__grid { display: grid; gap: 16px; }
+  @media (min-width: 640px) { .lead__grid { grid-template-columns: 1fr 1fr; } .lead__wide { grid-column: 1 / -1; } }
+  .lead__hp { position: absolute; left: -9999px; }
+  .lead__error { color: var(--risk-high); font-weight: 600; }
+  .lead__ok { padding: 20px; border: 1px solid var(--risk-ok); border-radius: var(--radius); background: #eef7f1; display: grid; gap: 4px; }
+  .lead__ok .mono { color: var(--risk-ok); }
+  .lead .btn { justify-self: start; }
+</style>

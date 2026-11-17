@@ -1,0 +1,24 @@
+---
+import BotButton from './BotButton.astro';
+import LeadForm from './LeadForm.astro';
+import type { BotTag } from '../data/site';
+interface Props { title: string; tag: BotTag; label: string; source: string; form?: boolean; }
+const { title, tag, label, source, form = true } = Astro.props;
+---
+<section class="section cta" id="contact" aria-labelledby={`cta-${source}`}>
+  <div class="container cta__grid">
+    <div class="cta__text">
+      <h2 id={`cta-${source}`}>{title}</h2>
+      <div class="muted cta__lead"><slot /></div>
+      <div><BotButton tag={tag}>{label}</BotButton></div>
+    </div>
+    {form && <div class="card"><h3 class="cta__h3">Или оставьте заявку</h3><LeadForm source={source} /></div>}
+  </div>
+</section>
+<style>
+  .cta__grid { display: grid; gap: 40px; }
+  .cta__text { display: grid; gap: 18px; align-content: start; }
+  .cta__lead { font-size: 1.125rem; }
+  .cta__h3 { margin-bottom: 16px; font-size: 1.2rem; }
+  @media (min-width: 1024px) { .cta__grid { grid-template-columns: 1fr 1.1fr; gap: 72px; } }
+</style>

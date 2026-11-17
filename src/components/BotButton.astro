@@ -1,0 +1,22 @@
+---
+import { botLink, botTags, type BotTag } from '../data/site';
+interface Props {
+  tag: BotTag;
+  variant?: 'primary' | 'ghost' | 'link';
+  size?: 'sm' | 'md';
+  block?: boolean;
+  class?: string;
+}
+const { tag, variant = 'primary', size = 'md', block = false, class: cls = '' } = Astro.props;
+const classes =
+  variant === 'link'
+    ? ['link-arrow', cls]
+    : ['btn', `btn--${variant}`, size === 'sm' && 'btn--sm', block && 'btn--block', cls];
+---
+<a
+  class:list={classes}
+  href={botLink(tag)}
+  target="_blank"
+  rel="noopener"
+  data-goal={`bot_${botTags[tag]}`}
+><slot /></a>

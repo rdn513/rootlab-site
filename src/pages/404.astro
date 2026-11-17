@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import BotButton from '../components/BotButton.astro';
+---
+<Base title="Страница не найдена | RootLab" description="Такой страницы нет. Вернитесь на главную RootLab." noindex>
+  <section class="section nf">
+    <div class="container">
+      <p class="mono muted">HTTP 404 · страница не найдена</p>
+      <h1>Здесь ничего нет. В отличие от вашего сайта — он, надеемся, работает</h1>
+      <p class="muted">Возможно, адрес изменился. Вот куда можно пойти:</p>
+      <ul class="ticks">
+        <li><a href="/">Главная</a></li>
+        <li><a href="/audit/">Аудит и техосмотр</a></li>
+        <li><a href="/support/">Сопровождение и тарифы</a></li>
+        <li><a href="/emergency/">Упал сайт — что делать</a></li>
+      </ul>
+      <div><BotButton tag="notFound" variant="ghost">Спросить инженера</BotButton></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf .container { display: grid; gap: 20px; justify-items: start; }
+  .nf h1 { max-width: 820px; }
+</style>

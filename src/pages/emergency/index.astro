@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/page.css';
+import PageHead from '../../components/PageHead.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BotButton from '../../components/BotButton.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Txt from '../../components/Txt.astro';
+import { getProduct, productPrice, company, isPlaceholder } from '../../data/site';
+import { productService, breadcrumbs } from '../../lib/schema';
+
+const em = getProduct('emergency');
+
+const steps = [
+  ['Проверьте, правда ли упал', 'Откройте сайт с телефона через мобильный интернет, а не через Wi-Fi офиса. Если открывается — проблема может быть в вашей сети.'],
+  ['Посмотрите, не закончились ли оплата и домен', 'Зайдите в панель хостинга и регистратора домена. Неоплаченный хостинг и истёкший домен — частая и самая простая причина.'],
+  ['Ничего не удаляйте и не переустанавливайте', 'Не нажимайте «переустановить», не удаляйте файлы и не откатывайте базу наугад. Так можно потерять заказы и следы причины.'],
+  ['Найдите доступы', 'Панель хостинга, сервер (SSH), админка сайта. Если доступов нет — вспомните, кто настраивал сервер и где он их оставил.'],
+  ['Напишите нам', 'Опишите, что видите: ошибка, белая страница, долго грузится. Пришлите адрес сайта. Доступы передадим безопасно, не в чате.'],
+];
+---
+<Base
+  title="Упал сайт — что делать прямо сейчас | Аварийная помощь RootLab"
+  description="Сайт не открывается, заказы не приходят? Пять шагов, что сделать сразу, и аварийная помощь инженера: 5 000 ₽ в час, минимум 2 часа. Поднимаем сайт и разбираем причину."
+  schema={[productService(em), breadcrumbs([{ name: 'Аварийная помощь', path: '/emergency/' }])]}
+>
+  <PageHead crumb="Аварийная помощь" eyebrow="Сайт не открывается" title="Упал сайт — что делать прямо сейчас">
+    <p>Подключимся, поднимем сайт или сервер и коротко разберём причину. {productPrice(em)}, {em.priceNote}.</p>
+    <Fragment slot="cta">
+      <BotButton tag="emergencyTop">Написать инженеру в Telegram</BotButton>
+      {isPlaceholder(company.phone)
+        ? <span class="small"><Txt text={company.phone} /></span>
+        : <a class="btn btn--ghost" href={`tel:${company.phone.replace(/[^\d+]/g, '')}`}>Позвонить: {company.phone}</a>}
+    </Fragment>
+  </PageHead>
+
+  <section class="section" aria-labelledby="now-title">
+    <div class="container two">
+      <div>
+        <SectionHead eyebrow="Пока ждёте инженера" title="Пять шагов за пять минут" id="now-title" />
+        <ol class="numlist">{steps.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}</ol>
+      </div>
+      <aside class="pricebox" style="align-self:start">
+        <p class="eyebrow">Аварийная помощь</p>
+        <p class="pricebox__sum">{productPrice(em)}</p>
+        <p class="pricebox__meta">{em.priceNote} · оплата по факту</p>
+        <ul class="ticks small">{em.includes.map((i) => <li>{i}</li>)}</ul>
+        <p class="small muted">Клиенты на сопровождении получают помощь в рамках тарифа. Для остальных — <mark class="ph">[часы аварийной помощи — уточнить]</mark>.</p>
+        <div><BotButton tag="emergencyAside">Нужна помощь сейчас</BotButton></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="after-title">
+    <div class="container">
+      <SectionHead eyebrow="После аварии" title="Чтобы не повторилось" id="after-title">
+        После подъёма сайта пришлём короткий разбор: что случилось и что сделать, чтобы это не повторилось. Если причин несколько, предложим аудит — и засчитаем его в работы.
+      </SectionHead>
+      <a class="link-arrow" href="/audit/">Об аудите</a>
+    </div>
+  </section>
+
+  <CtaBand title="Сайт лежит? Пишите" tag="emergencyBottom" label="Написать инженеру" source="emergency" form={false}>
+    <p>Telegram — самый быстрый способ. Почта: <a href={`mailto:${company.email}`}>{company.email}</a>.</p>
+  </CtaBand>
+</Base>

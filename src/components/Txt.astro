@@ -1,0 +1,7 @@
+---
+// Выводит текст и подсвечивает заглушки вида [… — уточнить]
+interface Props { text: string; }
+const { text } = Astro.props;
+const parts = text.split(/(\[[^\]]+\])/).filter(Boolean);
+---
+{parts.map((p) => (/^\[.*\]$/.test(p) ? <mark class="ph">{p}</mark> : p))}

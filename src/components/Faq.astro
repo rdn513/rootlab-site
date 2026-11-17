@@ -1,0 +1,25 @@
+---
+import Txt from './Txt.astro';
+interface Props { items: { q: string; a: string }[]; }
+const { items } = Astro.props;
+---
+<div class="faq">
+  {items.map((i, n) => (
+    <details class="faq__item" open={n === 0}>
+      <summary><span>{i.q}</span><span class="faq__icon mono" aria-hidden="true"></span></summary>
+      <p><Txt text={i.a} /></p>
+    </details>
+  ))}
+</div>
+<style>
+  .faq { border-top: 1px solid var(--line-strong); max-width: 860px; }
+  .faq__item { border-bottom: 1px solid var(--line-strong); }
+  summary {
+    display: flex; justify-content: space-between; gap: 16px; align-items: baseline;
+    padding: 20px 0; cursor: pointer; list-style: none; font-weight: 600; font-size: 1.125rem;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .faq__icon::after { content: '+'; color: var(--accent); font-size: 1.25rem; }
+  details[open] .faq__icon::after { content: '−'; }
+  .faq__item p { padding: 0 0 22px; color: var(--ink-2); max-width: 720px; }
+</style>

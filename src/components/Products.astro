@@ -1,0 +1,40 @@
+---
+import BotButton from './BotButton.astro';
+import { products, productPrice } from '../data/site';
+interface Props { ids?: string[]; }
+const list = Astro.props.ids ? products.filter((p) => Astro.props.ids!.includes(p.id)) : products;
+---
+<div class="prods">
+  {list.map((p) => (
+    <article class:list={['prod card', p.id === 'audit' && 'prod--key']} id={`product-${p.id}`}>
+      <div class="prod__head">
+        <h3>{p.name}</h3>
+        <p class="prod__aud small muted">{p.audience}</p>
+      </div>
+      <div class="prod__price">
+        <span class="prod__sum">{productPrice(p)}</span>
+        {p.priceNote && <span class="prod__note small">{p.priceNote}</span>}
+      </div>
+      <p class="prod__term mono">Срок: {p.term}</p>
+      <ul class="ticks small">{p.includes.map((i) => <li>{i}</li>)}</ul>
+      <div class="prod__cta">
+        <BotButton tag={p.tag} variant={p.id === 'audit' ? 'primary' : 'ghost'} block>{p.cta}</BotButton>
+        {p.page && <a class="small" href={p.page}>Подробнее</a>}
+      </div>
+    </article>
+  ))}
+</div>
+<style>
+  .prods { display: grid; gap: 16px; }
+  @media (min-width: 720px) { .prods { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .prods { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+  .prod { display: flex; flex-direction: column; gap: 16px; }
+  .prod--key { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .prod__head { display: grid; gap: 6px; }
+  .prod__head h3 { font-size: 1.125rem; }
+  .prod__price { display: grid; gap: 2px; }
+  .prod__sum { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+  .prod__note { color: var(--accent-ink); }
+  .prod__term { font-size: .8125rem; color: var(--ink-3); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .prod__cta { margin-top: auto; display: grid; gap: 10px; justify-items: center; padding-top: 8px; }
+</style>

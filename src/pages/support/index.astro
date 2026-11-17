@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/page.css';
+import PageHead from '../../components/PageHead.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BotButton from '../../components/BotButton.astro';
+import Plans from '../../components/Plans.astro';
+import Faq from '../../components/Faq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { plans, rub, firstClients, getProduct } from '../../data/site';
+import { supportService, faqPage, breadcrumbs } from '../../lib/schema';
+
+const basic = plans.find((p) => p.id === 'basic')!;
+const audit = getProduct('audit');
+
+const included = [
+  ['Мониторинг', 'Доступность сайта, ответы сервера, диск, память, процессор, сроки сертификатов, работа очередей и cron. Сигнал приходит дежурному инженеру, а не в общий чат.'],
+  ['Резервные копии', 'Копии файлов и баз по расписанию, хранение отдельно от основного сервера. Раз в месяц — тестовое восстановление с записью в отчёт.'],
+  ['Обновления системы', 'Плановые обновления ОС и серверного ПО в согласованное окно, с возможностью отката.'],
+  ['Часы инженера', 'Любые серверные задачи: настроить почту, поднять тестовый стенд, разобраться, почему тормозит. Переносятся ли неиспользованные часы — [перенос часов — уточнить].'],
+  ['Выпуск обновлений (тариф «Бизнес»)', 'Поддержка CI/CD: сборка, выкладка, откат. Помогаем разработчикам выпускать релизы днём и без страха.'],
+  ['Отчёт', 'Раз в месяц: что случилось, что сделали, результаты проверки копий, на что потратили часы. На «Бизнесе» — плюс квартальный разбор с планом.'],
+];
+
+const supportFaq = [
+  { q: 'Как считается срок реакции?', a: 'От момента, когда сработала сигнализация или пришла заявка, до момента, когда инженер начал работу и сообщил вам об этом. Время — по Екатеринбургу (UTC+5), в часы, указанные в тарифе.' },
+  { q: 'Можно начать сопровождение без аудита?', a: `Можно, но первый месяц уйдёт на то же, что делает аудит: разобраться, что где стоит. Поэтому обычно советуем начать с аудита — его ${rub(audit.price)} засчитываются в работы.` },
+  { q: 'Обслуживаете серверы 1С-Битрикс?', a: 'Да: окружение (BitrixVM или своя сборка), PHP, база данных, кеш, агенты на cron, копии, обновления платформы на тестовом стенде. Код сайта не дорабатываем.' },
+  { q: 'Что если часов не хватило?', a: 'Сверх пакета — по ставке [ставка за дополнительный час — уточнить], только после вашего согласования.' },
+  { q: 'Как отказаться?', a: 'Сопровождение помесячное. Отказаться можно с уведомлением за [срок — уточнить]; документацию и доступы передаём в последний месяц.' },
+];
+---
+<Base
+  title="Поддержка и администрирование серверов — от 35 000 ₽/мес | RootLab"
+  description="Ежемесячное сопровождение серверов сайтов и интернет-магазинов, в том числе на 1С-Битрикс: мониторинг, резервные копии с проверкой восстановления, часы инженера. Тарифы 35 000 и 80 000 ₽ в месяц."
+  schema={[supportService(), faqPage(supportFaq), breadcrumbs([{ name: 'Сопровождение', path: '/support/' }])]}
+>
+  <PageHead crumb="Сопровождение" eyebrow="DevOps на аутсорс · помесячно" title="Сопровождение серверов: следим, чиним, отчитываемся">
+    <p>Администрирование серверов сайтов, интернет-магазинов и онлайн-сервисов, в том числе на 1С-Битрикс. От {rub(basic.price)} в месяц, без годового договора.</p>
+    <Fragment slot="cta">
+      <BotButton tag="supportTop">Обсудить сопровождение</BotButton>
+      <a class="link-arrow" href="#plans">Сравнить тарифы</a>
+    </Fragment>
+  </PageHead>
+
+  <section class="section" aria-labelledby="inc-title">
+    <div class="container">
+      <SectionHead eyebrow="Что входит" title="Что мы делаем каждый месяц" id="inc-title" />
+      <dl class="kv" style="max-width:920px">{included.map(([t, d]) => <div><dt>{t}</dt><dd set:html={d.replace(/(\[[^\]]+\])/g, '<mark class="ph">$1</mark>')} /></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="plans" aria-labelledby="plans-title">
+    <div class="container">
+      <SectionHead eyebrow="Тарифы" title="Два тарифа, открытые сроки" id="plans-title">
+        Сроки реакции записываем в договор. На «Бизнесе» за нарушение срока — компенсация.
+      </SectionHead>
+      <Plans mode="tech" tags={{ basic: 'supportBasic', business: 'supportBusiness' }} nightTag="supportNight" />
+      <p class="note" style="margin-top:32px">Первым {firstClients.slots} клиентам — скидка {firstClients.discount}% на первые {firstClients.months} месяца в обмен на право опубликовать кейс и отзыв.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sfaq-title">
+    <div class="container">
+      <SectionHead eyebrow="Вопросы" title="Частые вопросы о сопровождении" id="sfaq-title" />
+      <Faq items={supportFaq} />
+    </div>
+  </section>
+
+  <CtaBand title="Возьмём ваши серверы под присмотр" tag="supportBottom" label="Обсудить сопровождение" source="support">
+    <p>Расскажите, что за проект и где он работает. Подскажем тариф и с чего начать.</p>
+  </CtaBand>
+</Base>

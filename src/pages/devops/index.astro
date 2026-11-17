@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/page.css';
+import PageHead from '../../components/PageHead.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BotButton from '../../components/BotButton.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getProduct, productPrice, rub } from '../../data/site';
+import { productService, breadcrumbs } from '../../lib/schema';
+
+const order = getProduct('order');
+const audit = getProduct('audit');
+const scope = [
+  ['CI/CD', 'Пайплайн в GitLab CI, GitHub Actions или другом инструменте, который у вас уже есть: сборка, тесты, выкладка на стенды и в прод, откат одной командой.'],
+  ['Окружения', 'Отдельные dev / stage / prod, одинаковые по конфигурации. Docker и docker compose там, где они уместны; Kubernetes — только если он действительно нужен.'],
+  ['Инфраструктура как код', 'Конфигурация серверов в Ansible или Terraform, а не в памяти администратора. Новый сервер поднимается по описанию.'],
+  ['Секреты', 'Пароли и ключи — в хранилище секретов или переменных CI, а не в репозитории.'],
+  ['Мониторинг и логи', 'Метрики, алерты в Telegram, централизованные логи. Порог алертов настраиваем под ваш трафик, чтобы не было шума.'],
+  ['Бэкапы', 'Резервное копирование баз и файлов с регулярным тестовым восстановлением.'],
+  ['Документация', 'Схема инфраструктуры, runbook на типовые аварии, инструкция для разработчиков: как выпустить релиз и как откатиться.'],
+];
+---
+<Base
+  title="Внедрение DevOps и CI/CD на аутсорс — от 90 000 ₽ | RootLab"
+  description="Внедряем CI/CD, инфраструктуру как код, мониторинг и бэкапы для продуктовых команд без своего DevOps-инженера. Проект «Порядок»: 2–6 недель, от 90 000 ₽, с документацией."
+  schema={[productService(order), breadcrumbs([{ name: 'Выпуск обновлений', path: '/devops/' }])]}
+>
+  <PageHead crumb="Выпуск обновлений" eyebrow="Для продуктовых команд 5–30 разработчиков" title="Релизы днём и без страха: DevOps на аутсорс">
+    <p>Для команд без своего DevOps-инженера. Строим процесс выпуска обновлений, в котором релиз — рутина, а знание об инфраструктуре не живёт в голове одного человека.</p>
+    <Fragment slot="cta">
+      <BotButton tag="devops">Обсудить проект</BotButton>
+      <span class="mono small muted">{order.term} · {productPrice(order)}</span>
+    </Fragment>
+  </PageHead>
+
+  <section class="section" aria-labelledby="dscope-title">
+    <div class="container">
+      <SectionHead eyebrow="Состав работ" title="Что входит в проект «Порядок»" id="dscope-title">
+        Точный состав определяем по итогам аудита ({rub(audit.price)}, засчитывается в стоимость).
+      </SectionHead>
+      <dl class="kv" style="max-width:920px">{scope.map(([t, d]) => <div><dt>{t}</dt><dd>{d}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="pipe-title">
+    <div class="container two">
+      <div>
+        <SectionHead eyebrow="Как выглядит результат" title="Релиз — это merge, а не ночная смена" id="pipe-title" />
+        <ul class="ticks">
+          <li>Каждый merge в main собирается и проверяется автоматически.</li>
+          <li>Выкладка на stage — автоматически, в prod — по кнопке.</li>
+          <li>Откат на предыдущую версию — одна команда, минуты, а не часы.</li>
+          <li>Миграции базы данных — с проверкой и планом отката.</li>
+        </ul>
+      </div>
+      <pre class="code" aria-label="Пример схемы пайплайна"><span class="c"># схема пайплайна (пример)</span>
+push ─► build ─► test ─► deploy:stage
+                           │
+                    manual ▼
+                     deploy:prod ─► smoke-check
+                           │ fail
+                           ▼
+                       rollback</pre>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="after-d-title">
+    <div class="container">
+      <SectionHead eyebrow="После проекта" title="Дальше — сами или с нами" id="after-d-title">
+        Документация и доступы остаются у вас. Можно вести инфраструктуру самим или перейти на сопровождение: тариф «Бизнес» включает поддержку выпуска обновлений.
+      </SectionHead>
+      <a class="link-arrow" href="/support/">Тарифы сопровождения</a>
+    </div>
+  </section>
+
+  <CtaBand title="Расскажите, как вы выпускаете релизы сейчас" tag="devopsBottom" label="Обсудить проект" source="devops">
+    <p>Начнём с аудита: за 5 дней поймём, что мешает выпускать спокойно, и оценим работы в часах.</p>
+  </CtaBand>
+</Base>

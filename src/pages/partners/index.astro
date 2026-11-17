@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/page.css';
+import PageHead from '../../components/PageHead.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BotButton from '../../components/BotButton.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { partners, rub, getProduct } from '../../data/site';
+import { breadcrumbs } from '../../lib/schema';
+
+const audit = getProduct('audit');
+const how = [
+  ['Вы приводите клиента', 'Или передаёте нам серверную часть уже работающего проекта. Знакомим по вашему сценарию: от нашего имени или от вашего.'],
+  ['Мы проверяем инфраструктуру', `Экспресс-аудит за 5 рабочих дней (${rub(audit.price)}, засчитывается в работы). Отчёт получаете вы — решаете, как показать его клиенту.`],
+  ['Наводим порядок и сопровождаем', 'Копии, сигнализация, обновления, документация. Клиент звонит «сайт лежит» — чиним мы, ваш разработчик остаётся в своём проекте.'],
+];
+---
+<Base
+  title="DevOps для веб-студий: серверы под вашим именем | RootLab"
+  description={`Берём серверную часть проектов веб-студии: аудит, копии, мониторинг, аварийная помощь. ${partners.revenueShare}% от платежей клиента за ${partners.revenueShareMonths} месяцев или скидка ${partners.whiteLabelDiscount}% при работе под именем студии. Клиентов не переманиваем.`}
+  schema={[breadcrumbs([{ name: 'Веб-студиям', path: '/partners/' }])]}
+>
+  <PageHead crumb="Веб-студиям" eyebrow="Партнёрская программа" title="Вы делаете сайты. Серверы — на нас">
+    <p>Для студий и агентств разработки без своего DevOps. Берём серверную часть ваших проектов: клиент остаётся вашим, разработчики — в своих задачах.</p>
+    <Fragment slot="cta"><BotButton tag="partners">Обсудить партнёрство</BotButton></Fragment>
+  </PageHead>
+
+  <section class="section" aria-labelledby="terms-title">
+    <div class="container">
+      <SectionHead eyebrow="Условия" title="Два варианта — выбираете вы" id="terms-title" />
+      <div class="grid grid--2">
+        <article class="pricebox">
+          <p class="eyebrow">Вариант 1 · рекомендация</p>
+          <p class="pricebox__sum">{partners.revenueShare}%</p>
+          <p class="pricebox__meta">от платежей клиента за первые {partners.revenueShareMonths} месяцев</p>
+          <p class="muted">Вы знакомите нас с клиентом, дальше мы работаем с ним напрямую по своему договору. Вознаграждение — с каждого платежа: аудит, проект, сопровождение.</p>
+        </article>
+        <article class="pricebox">
+          <p class="eyebrow">Вариант 2 · под вашим именем</p>
+          <p class="pricebox__sum">−{partners.whiteLabelDiscount}%</p>
+          <p class="pricebox__meta">скидка от наших цен</p>
+          <p class="muted">Клиент видит только вашу студию: договор с вами, отчёты под вашим логотипом, наши инженеры представляются вашей командой. Скидка зависит от объёма.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="promise-title">
+    <div class="container two">
+      <div>
+        <SectionHead eyebrow="Наши обещания" title="Что мы не делаем" id="promise-title" />
+        <ul class="ticks">
+          <li>Не переманиваем ваших клиентов — ни во время работы, ни после.</li>
+          <li>Не предлагаем им разработку, доработки и дизайн. Это ваша работа.</li>
+          <li>Не обсуждаем с клиентом ваши цены и сроки.</li>
+          <li>Закрепляем всё это в партнёрском договоре <mark class="ph">[текст договора — уточнить]</mark>.</li>
+        </ul>
+      </div>
+      <div>
+        <SectionHead eyebrow="Как работаем" title="Три шага" id="how-p-title" />
+        <ol class="numlist">{how.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}</ol>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Обсудим, какие проекты можно передать" tag="partnersBottom" label="Написать в Telegram" source="partners">
+    <p>Расскажите, сколько у вас проектов на поддержке и где они живут. Предложим формат и начнём с одного.</p>
+  </CtaBand>
+</Base>

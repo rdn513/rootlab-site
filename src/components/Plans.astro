@@ -1,0 +1,91 @@
+---
+import BotButton from './BotButton.astro';
+import { plans, planRows, planNotes, rub, type BotTag } from '../data/site';
+interface Props { mode?: 'plain' | 'tech'; tags?: { basic: BotTag; business: BotTag }; nightTag?: BotTag; }
+const { mode = 'plain', tags, nightTag = 'pricingNightShift' } = Astro.props;
+const fmt = (v: string | boolean) => (v === true ? 'Да' : v === false ? 'Нет' : v);
+const tagFor = (id: 'basic' | 'business') => tags?.[id] ?? plans.find((p) => p.id === id)!.tag;
+---
+<div class="plans">
+  <!-- Таблица: планшет и десктоп -->
+  <div class="plans__table">
+    <table>
+      <caption class="sr-only">Сравнение тарифов ежемесячного сопровождения</caption>
+      <thead>
+        <tr>
+          <td></td>
+          {plans.map((p) => (
+            <th scope="col" class:list={[p.featured && 'is-feat']}>
+              <span class="pl__name">{p.name}</span>
+              <span class="pl__price">{rub(p.price)}<small>/мес</small></span>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {planRows.map((r) => (
+          <tr>
+            <th scope="row">{r[mode]}</th>
+            <td class:list={[r.basic === false && 'is-no']}>{fmt(r.basic)}</td>
+            <td class:list={['is-feat', r.business === false && 'is-no']}>{fmt(r.business)}</td>
+          </tr>
+        ))}
+        <tr class="plans__ctarow">
+          <td></td>
+          {plans.map((p) => (
+            <td class:list={[p.featured && 'is-feat']}>
+              <BotButton tag={tagFor(p.id)} variant={p.featured ? 'primary' : 'ghost'} block>Выбрать «{p.name}»</BotButton>
+            </td>
+          ))}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Карточки: телефон -->
+  <div class="plans__cards">
+    {plans.map((p) => (
+      <article class:list={['card pcard', p.featured && 'is-feat']}>
+        <h3>{p.name}</h3>
+        <p class="pl__price">{rub(p.price)}<small>/мес</small></p>
+        <dl>
+          {planRows.map((r) => (
+            <div><dt>{r[mode]}</dt><dd>{fmt(r[p.id])}</dd></div>
+          ))}
+        </dl>
+        <BotButton tag={tagFor(p.id)} variant={p.featured ? 'primary' : 'ghost'} block>Выбрать «{p.name}»</BotButton>
+      </article>
+    ))}
+  </div>
+
+  <p class="plans__note small muted">{planNotes.timezone}</p>
+  <p class="plans__night">{planNotes.nightShift} <BotButton tag={nightTag} variant="link">Написать</BotButton></p>
+</div>
+<style>
+  .plans__table { display: none; }
+  .plans__cards { display: grid; gap: 16px; }
+  .pcard { display: grid; gap: 14px; }
+  .pcard.is-feat, .plans table th.is-feat { border-color: var(--accent); }
+  .pcard.is-feat { box-shadow: inset 0 0 0 1px var(--accent); }
+  .pl__name { display: block; font-size: 1.125rem; font-weight: 600; }
+  .pl__price { display: block; font-size: 1.75rem; font-weight: 600; letter-spacing: -.02em; }
+  .pl__price small { font-size: .9375rem; font-weight: 400; color: var(--ink-3); }
+  .pcard dl { margin: 0; display: grid; }
+  .pcard dl div { display: grid; gap: 2px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .pcard dt { font-size: .875rem; color: var(--ink-3); }
+  .pcard dd { margin: 0; font-weight: 600; }
+  .plans__note { margin-top: 20px; }
+  .plans__night { margin-top: 8px; font-weight: 600; }
+
+  @media (min-width: 768px) {
+    .plans__cards { display: none; }
+    .plans__table { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 20px; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+    thead td, thead th { border-top: 0; padding-top: 24px; }
+    tbody th { font-weight: 400; color: var(--ink-2); width: 38%; }
+    td.is-feat, th.is-feat { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+    td.is-no { color: var(--ink-3); }
+    .plans__ctarow td { padding-bottom: 24px; }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import BotButton from '../../components/BotButton.astro';
+import { social } from '../../data/site';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => +b.data.date - +a.data.date);
+const tg = social.find((s) => s.url.includes('t.me'))!;
+const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title="Блог RootLab — о серверах, копиях и выпуске обновлений" description="Статьи команды RootLab: как не потерять сайт и заказы, как проверять резервные копии и выпускать обновления без ночных работ.">
+  <PageHead crumb="Блог" title="Блог">
+    <p>Пишем о серверах, копиях и выпуске обновлений — простым языком и с примерами.</p>
+  </PageHead>
+  <section class="section">
+    <div class="container">
+      {posts.length === 0 ? (
+        <div class="empty">
+          <p class="mono muted">Статей пока нет — скоро появятся.</p>
+          <p>Пока читайте нас в <a href={tg.url} target="_blank" rel="noopener">Telegram-канале</a> или задайте вопрос инженеру.</p>
+          <div><BotButton tag="blog" variant="ghost">Задать вопрос</BotButton></div>
+        </div>
+      ) : (
+        <ul class="posts">
+          {posts.map((p) => (
+            <li>
+              <time class="mono small muted" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+              <h2><a href={`/blog/${p.id}/`}>{p.data.title}</a></h2>
+              <p class="muted">{p.data.description}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</Base>
+<style>
+  .empty { display: grid; gap: 14px; max-width: 560px; }
+  .posts { list-style: none; display: grid; max-width: 760px; }
+  .posts li { display: grid; gap: 8px; padding: 24px 0; border-top: 1px solid var(--line); }
+  .posts h2 { font-size: 1.4rem; }
+  .posts h2 a { color: var(--ink); text-decoration: none; }
+  .posts h2 a:hover { color: var(--accent); }
+</style>

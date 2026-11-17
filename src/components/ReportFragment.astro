@@ -1,0 +1,50 @@
+---
+// Фрагмент образца отчёта — HTML/CSS, без картинок. Данные условные.
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+const rows = [
+  { lvl: 'high', label: 'Высокий', title: 'Копии базы заказов ни разу не восстанавливали', note: 'Если сервер сломается, неизвестно, вернутся ли заказы' },
+  { lvl: 'high', label: 'Высокий', title: 'Доступ к серверу остался у бывшего подрядчика', note: 'Пароль не меняли с момента ухода' },
+  { lvl: 'mid', label: 'Средний', title: 'Диск заполнен на 88%', note: 'При текущем росте место закончится примерно через месяц' },
+  { lvl: 'ok', label: 'В порядке', title: 'Сертификат HTTPS продлевается сам', note: '' },
+];
+---
+<figure class:list={['report', compact && 'report--compact']} aria-label="Фрагмент образца отчёта об аудите">
+  <div class="report__bar mono" aria-hidden="true">
+    <span></span><span></span><span></span>
+    <em>otchet-audit.pdf</em>
+  </div>
+  <div class="report__body">
+    <p class="report__meta mono">ОБРАЗЕЦ · экспресс-аудит · стр. 2 из 9</p>
+    <p class="report__h">Риски по приоритетам</p>
+    <ol class="report__list">
+      {rows.map((r) => (
+        <li class={`r r--${r.lvl}`}>
+          <span class="r__lvl mono">{r.label}</span>
+          <span class="r__t">{r.title}{r.note && !compact && <small>{r.note}</small>}</span>
+        </li>
+      ))}
+    </ol>
+    <p class="report__first mono"><b>Сделать первым:</b> проверить восстановление копии — 2 ч.</p>
+  </div>
+  <figcaption class="report__cap mono">Фрагмент образца. Данные условные.</figcaption>
+</figure>
+<style>
+  .report { margin: 0; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); box-shadow: 0 1px 0 var(--line), 0 18px 40px -24px rgba(29,32,36,.28); overflow: hidden; }
+  .report__bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); font-size: .75rem; color: var(--ink-3); }
+  .report__bar span { width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); }
+  .report__bar em { font-style: normal; margin-left: 8px; }
+  .report__body { padding: 18px 18px 6px; }
+  .report__meta { font-size: .6875rem; letter-spacing: .04em; color: var(--ink-3); }
+  .report__h { font-weight: 600; font-size: 1.0625rem; margin: 6px 0 12px; }
+  .report__list { list-style: none; display: grid; }
+  .r { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 10px 0; border-top: 1px dashed var(--line); font-size: .9375rem; line-height: 1.35; }
+  .r__lvl { font-size: .75rem; padding-top: 2px; display: flex; gap: 6px; align-items: baseline; }
+  .r__lvl::before { content: ''; width: 8px; height: 8px; border-radius: 2px; flex: none; transform: translateY(-1px); }
+  .r--high .r__lvl { color: var(--risk-high); } .r--high .r__lvl::before { background: var(--risk-high); }
+  .r--mid .r__lvl { color: var(--risk-mid); } .r--mid .r__lvl::before { background: var(--risk-mid); }
+  .r--ok .r__lvl { color: var(--risk-ok); } .r--ok .r__lvl::before { background: var(--risk-ok); }
+  .r__t small { display: block; margin-top: 3px; color: var(--ink-3); font-size: .8125rem; }
+  .report__first { margin: 4px -18px 0; padding: 12px 18px; border-top: 1px solid var(--line); background: var(--accent-soft); font-size: .8125rem; color: var(--accent-ink); }
+  .report__cap { padding: 10px 18px; font-size: .75rem; color: var(--ink-3); border-top: 1px solid var(--line); }
+</style>

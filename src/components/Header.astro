@@ -1,0 +1,98 @@
+---
+import Logo from './Logo.astro';
+import BotButton from './BotButton.astro';
+import Txt from './Txt.astro';
+import { company, nav, isPlaceholder } from '../data/site';
+const phoneHref = isPlaceholder(company.phone) ? null : `tel:${company.phone.replace(/[^\d+]/g, '')}`;
+---
+<header class="hdr">
+  <div class="container hdr__row">
+    <Logo />
+    <nav class="hdr__nav" aria-label="Основное меню">
+      <ul>
+        {nav.map((n) => (
+          <li><a href={n.href} class:list={[n.alert && 'is-alert']}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="hdr__contacts">
+      {phoneHref ? <a href={phoneHref}>{company.phone}</a> : <span><Txt text={company.phone} /></span>}
+      <a href={`mailto:${company.email}`}>{company.email}</a>
+    </div>
+    <BotButton tag="header" size="sm" class="hdr__cta">Обсудить задачу</BotButton>
+    <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mobile-menu">
+      <span class="sr-only">Меню</span>
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 7h16M3 15h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="mmenu" id="mobile-menu" hidden>
+    <div class="container">
+      <ul>
+        {nav.map((n) => (<li><a href={n.href} class:list={[n.alert && 'is-alert']}>{n.label}</a></li>))}
+      </ul>
+      <div class="mmenu__contacts">
+        {phoneHref ? <a href={phoneHref}>{company.phone}</a> : <span><Txt text={company.phone} /></span>}
+        <a href={`mailto:${company.email}`}>{company.email}</a>
+      </div>
+      <BotButton tag="mobileMenu" block>Обсудить задачу в Telegram</BotButton>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.hdr__burger');
+  const menu = document.getElementById('mobile-menu');
+  if (btn && menu) {
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+    };
+    btn.addEventListener('click', () => set(menu.hidden));
+    menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) set(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) { set(false); btn.focus(); } });
+  }
+</script>
+
+<style>
+  .hdr {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: saturate(1.4) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hdr__row { display: flex; align-items: center; gap: 16px; height: var(--header-h); }
+  .hdr__nav, .hdr__contacts { display: none; }
+  .hdr :global(.hdr__cta) { margin-left: auto; }
+  .hdr__burger {
+    display: inline-grid; place-items: center; width: 44px; height: 44px; margin-right: -10px;
+    background: none; border: 0; color: var(--ink); cursor: pointer; border-radius: var(--radius);
+  }
+  .is-alert::before {
+    content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--risk-high); margin-right: 8px; vertical-align: 2px;
+  }
+  .mmenu { border-top: 1px solid var(--line); background: var(--bg); padding: 12px 0 24px; }
+  .mmenu ul { list-style: none; display: grid; }
+  .mmenu li a { display: block; padding: 12px 0; color: var(--ink); text-decoration: none; font-size: 1.125rem; border-bottom: 1px solid var(--line); }
+  .mmenu__contacts { display: grid; gap: 6px; margin: 20px 0; font-family: var(--mono); font-size: .9375rem; }
+  .mmenu__contacts a { color: var(--ink); }
+
+  @media (max-width: 379px) {
+    .hdr :global(.hdr__cta) { display: none; }
+    .hdr__burger { margin-left: auto; }
+  }
+  @media (min-width: 1100px) {
+    .hdr__burger, .mmenu { display: none !important; }
+    .hdr__nav { display: block; margin-left: 24px; }
+    .hdr__nav ul { list-style: none; display: flex; gap: 24px; }
+    .hdr__nav a { color: var(--ink); text-decoration: none; font-size: .9375rem; }
+    .hdr__nav a:hover { color: var(--accent); }
+    .hdr__contacts {
+      display: grid; margin-left: auto; text-align: right; line-height: 1.35;
+      font-family: var(--mono); font-size: .8125rem;
+    }
+    .hdr__contacts a { color: var(--ink); text-decoration: none; }
+    .hdr__contacts a:hover { color: var(--accent); }
+    .hdr :global(.hdr__cta) { margin-left: 0; }
+  }
+</style>
